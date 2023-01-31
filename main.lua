@@ -10,8 +10,10 @@ local push = require('lib/push')
 love.graphics.setDefaultFilter("nearest", "nearest") --disable blurry scaling
 
 TILE_SIZE = 4
+TREE_WIDTH = 10
+TREE_HEIGHT = 10
 
-gameWidth, gameHeight = TILE_SIZE * 10, TILE_SIZE * 100
+gameWidth, gameHeight = TILE_SIZE * TREE_WIDTH, TILE_SIZE * TREE_HEIGHT + TILE_SIZE
 
 windowWidth, windowHeight = love.window.getDesktopDimensions()
 windowWidth, windowHeight = windowWidth*.8, windowHeight*.8
@@ -28,6 +30,17 @@ function love.resize(w, h)
 end
 
 function love.load()
+
+    -- Entity States
+    WAITING = 1
+    MOVING_NORTH = 2
+    MOVING_SOUTH = 3
+    MOVING_EAST = 4
+    MOVING_WEST = 5
+    ATTACKING = 6
+    DEAD = 7
+    DOCILE = 8
+
     -- Make sure numbers are truly random
     math.randomseed(os.time())
 
@@ -36,15 +49,32 @@ function love.load()
 
     -- Yggdrasil Code
     require('yggdrasil')
+
+    -- Ratatoskr Code
+    require('ratatoskr')
+
+    -- HUD code
+    require('hud')
+
+    -- Controls Code
+    require('controls')
     
     -- Generate Yggdrasil
-    yggdrasil:new_map(10, 100)
+    yggdrasil:new_map(TREE_WIDTH, TREE_HEIGHT)
 
     -- Debug
-    print(tprint(yggdrasil.map))
+    
 end
 
 function love.update(dt)
+
+    -- Get Control Input
+    getKeyboardInput()
+
+    -- Update Ratatoskr
+    ratatoskr:update(dt)
+
+    canMoveDirection(ratatoskr, "dir")
 
 end
 
@@ -55,6 +85,7 @@ function love.draw()
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("fill", 0,0, gameWidth,gameHeight)
 
+    -- Draw Yggdrasil
     love.graphics.setColor(1, 1, 1)
     for i,row in ipairs(yggdrasil.map) do
         for j,tile in ipairs(row) do
@@ -77,5 +108,8 @@ function love.draw()
         end
     end
 
+    ratatoskr:draw()
+
     push:apply("end")
 end
+
