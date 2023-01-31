@@ -1,0 +1,1 @@
+maze_tileset = love.graphics.newImage('img/basic_branches.png')

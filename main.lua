@@ -1,9 +1,47 @@
 -- Table Utility Library
 require('lib/table_utils')
 
+-- Maze Generation Library
+require('mazegen')
+
+-- Push library to scale up our pixel art correctly
+local push = require('lib/push')
+
+love.graphics.setDefaultFilter("nearest", "nearest") --disable blurry scaling
+
+TILE_SIZE = 4
+
+gameWidth, gameHeight = TILE_SIZE * 10, TILE_SIZE * 20
+
+windowWidth, windowHeight = love.window.getDesktopDimensions()
+windowWidth, windowHeight = windowWidth*.8, windowHeight*.8
+
+push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {
+    fullscreen = false,
+    resizable = true,
+    pixelperfect = false
+})
+push:setBorderColor{0.2, 0.2, 0} --default value
+  
+function love.resize(w, h)
+    push:resize(w, h)
+end
+
 function love.load()
-    maze = make_maze(10, 5)
-    print(tprint(maze))
+    -- Make sure numbers are truly random
+    math.randomseed(os.time())
+
+    -- Load images and set up animations
+    require('imageload')
+
+    -- Yggdrasil Code
+    require('yggdrasil')
+    
+    -- Generate Yggdrasil
+    yggdrasil:new_map(10, 20)
+
+    -- Debug
+    print(tprint(yggdrasil.map))
 end
 
 function love.update(dt)
@@ -11,89 +49,33 @@ function love.update(dt)
 end
 
 function love.draw()
+    push:apply("start")
 
-end
+    -- Draw Background
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.rectangle("fill", 0,0, gameWidth,gameHeight)
 
-function make_maze(width, height)
-    -- Construct a table to represent the maze
-    -- Each cell is represented by a binary value of initially decimal 15 (1111) for 4 walls
-    local maze = {}
-    for i=1, height, 1 do
-        local row = {}
-        for j=1, width, 1 do
-            table.insert(row, 15)
-        end
-        table.insert(maze, row)
-    end
-
-    -- Robot that will carve out the maze
-    local robot = {}
-    -- Coordinates of the robot's current position, initially set to a random y and x value
-    robot.y = love.math.random(1, height)
-    robot.x = love.math.random(1, width)
-    -- Table of coordinates representing visited cells (to append to and verify when maze is complete)
-    robot.visited = {{x=robot.x, y=robot.y}}
-    -- Table representing visited cells that are forkable (to append and pop from to go back when the robot cannot find an unvisited cell)
-    robot.visited_forkable = {}
-
-    count = 0
-    -- Loop to carve out the maze
-    while #robot.visited < width * height do
-
-        -- List of possible directions the robot can move
-        local available_directions = {}
-
-        -- Add possible directions based on conditions
-        if (robot.x > 1) and not tcontains(robot.visited, {robot.x - 1, robot.y}) then
-            table.insert(available_directions, "left")
-        end
-        if (robot.x < width) and not tcontains(robot.visited, {robot.x + 1, robot.y}) then
-            table.insert(available_directions, "right")
-        end
-        if (robot.y > 1) and not tcontains(robot.visited, {robot.x, robot.y - 1}) then
-            table.insert(available_directions, "up")
-        end
-        if (robot.y < height) and not tcontains(robot.visited, {robot.x, robot.y + 1}) then
-            table.insert(available_directions, "down")
-        end
-
-        -- If no directions were possible, revert to the previous value in robot.visited_forkable
-        --   and restart the loop
-        if #available_directions == 0 then
-            table.remove(robot.visited_forkable)
-            robot.x = robot.visited_forkable[#robot.visited_forkable].x
-            robot.y = robot.visited_forkable[#robot.visited_forkable].y
-        else
-
-            -- Choose a direction to move
-            local choice = available_directions[love.math.random(1, #available_directions)]
-
-            -- Update the walls of the current cell, move the robot, and update the walls of the new cell all based on the direction of movement
-            if choice == "left" then
-                maze[robot.y][robot.x] = maze[robot.y][robot.x] - 1
-                robot.x = robot.x - 1
-                maze[robot.y][robot.x] = maze[robot.y][robot.x] - 4
-            elseif choice == "right" then
-                maze[robot.y][robot.x] = maze[robot.y][robot.x] - 4
-                robot.x = robot.x + 1
-                maze[robot.y][robot.x] = maze[robot.y][robot.x] - 1
-            elseif choice == "up" then
-                maze[robot.y][robot.x] = maze[robot.y][robot.x] - 8
-                robot.y = robot.y - 1
-                maze[robot.y][robot.x] = maze[robot.y][robot.x] - 2
-            elseif choice == "down" then
-                maze[robot.y][robot.x] = maze[robot.y][robot.x] - 2
-                robot.y = robot.y + 1
-                maze[robot.y][robot.x] = maze[robot.y][robot.x] - 8
-            end
-
-            -- Add the new cell to the lists of visited cells
-            table.insert(robot.visited, {x=robot.x, y=robot.y})
-            table.insert(robot.visited_forkable, {x=robot.x, y=robot.y})
+    love.graphics.setColor(1, 1, 1)
+    for i,row in ipairs(yggdrasil.map) do
+        for j,tile in ipairs(row) do
+            if tile == 0 then love.graphics.draw(maze_tileset, yggdrasil.tiles.all_dir, ((j - 1)) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 1 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_right_down, ((j - 1)) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 2 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_right_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 3 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_right, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 4 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_down_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 5 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_down, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 6 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 7 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 8 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right_down_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 9 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right_down, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 10 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 11 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 12 then love.graphics.draw(maze_tileset, yggdrasil.tiles.down_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 13 then love.graphics.draw(maze_tileset, yggdrasil.tiles.down, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 14 then love.graphics.draw(maze_tileset, yggdrasil.tiles.left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 15 then love.graphics.draw(maze_tileset, yggdrasil.tiles.none, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
         end
     end
 
-    print(tprint(robot.visited))
-
-    return maze
+    push:apply("end")
 end
