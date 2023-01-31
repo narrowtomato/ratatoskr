@@ -11,7 +11,7 @@ love.graphics.setDefaultFilter("nearest", "nearest") --disable blurry scaling
 
 TILE_SIZE = 4
 
-gameWidth, gameHeight = TILE_SIZE * 10, TILE_SIZE * 20
+gameWidth, gameHeight = TILE_SIZE * 10, TILE_SIZE * 100
 
 windowWidth, windowHeight = love.window.getDesktopDimensions()
 windowWidth, windowHeight = windowWidth*.8, windowHeight*.8
@@ -38,7 +38,7 @@ function love.load()
     require('yggdrasil')
     
     -- Generate Yggdrasil
-    yggdrasil:new_map(10, 20)
+    yggdrasil:new_map(10, 100)
 
     -- Debug
     print(tprint(yggdrasil.map))
