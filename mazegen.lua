@@ -79,8 +79,6 @@ function mazegen(width, height)
         end
     end
 
-    print(tprint(robot.visited))
-
     return maze
 end
 

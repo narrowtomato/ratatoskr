@@ -1,7 +1,8 @@
 ratatoskr = {}
 
-ratatoskr.ENERGY_GAIN_RATE = 5
-ratatoskr.MAX_ENERGY = 100
+ratatoskr.ENERGY_GAIN_RATE = 1
+ratatoskr.MAX_ENERGY = 1000
+ratatoskr.JUMP_DEPLETE = 500
 
 ratatoskr.x = math.floor(TREE_WIDTH / 2) * TILE_SIZE
 ratatoskr.y = TREE_HEIGHT * TILE_SIZE
@@ -10,6 +11,7 @@ ratatoskr.state = WAITING
 ratatoskr.lastpos = {x=ratatoskr.x,y=ratatoskr.y}
 ratatoskr.nextpos = {x=ratatoskr.x,y=ratatoskr.y}
 ratatoskr.energy = ratatoskr.MAX_ENERGY
+
 
 
 function ratatoskr:update(dt)
@@ -43,9 +45,16 @@ function ratatoskr:update(dt)
             ratatoskr.state = WAITING
         end
     end
+
+    -- Restore Energy
+    if ratatoskr.energy < ratatoskr.MAX_ENERGY then
+        ratatoskr.energy = ratatoskr.energy + ratatoskr.ENERGY_GAIN_RATE
+    end
+
+    print(ratatoskr.energy)
 end
 
 function ratatoskr:draw()
     love.graphics.setColor(255/255, 204/255, 0/255)
-    love.graphics.rectangle("fill", self.x + (TILE_SIZE / 4), self.y - (TILE_SIZE / 4 * 3), TILE_SIZE / 2, TILE_SIZE / 2)
+    love.graphics.rectangle("fill", self.x + (TILE_SIZE / 4) + TILE_SIZE, self.y - (TILE_SIZE / 4 * 3), TILE_SIZE / 2, TILE_SIZE / 2)
 end

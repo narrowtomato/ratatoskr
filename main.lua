@@ -11,9 +11,9 @@ love.graphics.setDefaultFilter("nearest", "nearest") --disable blurry scaling
 
 TILE_SIZE = 4
 TREE_WIDTH = 10
-TREE_HEIGHT = 10
+TREE_HEIGHT = 50
 
-gameWidth, gameHeight = TILE_SIZE * TREE_WIDTH, TILE_SIZE * TREE_HEIGHT + TILE_SIZE
+gameWidth, gameHeight = TREE_WIDTH * TILE_SIZE + TILE_SIZE * 2, TREE_WIDTH * TILE_SIZE + TILE_SIZE * 2
 
 windowWidth, windowHeight = love.window.getDesktopDimensions()
 windowWidth, windowHeight = windowWidth*.8, windowHeight*.8
@@ -28,6 +28,11 @@ push:setBorderColor{0.2, 0.2, 0} --default value
 function love.resize(w, h)
     push:resize(w, h)
 end
+
+-- Camera Library
+gamera = require 'lib/gamera-master/gamera'
+cam = gamera.new(-200, -200, 2000, 2000)
+cam:setWindow(0,0,gameWidth,gameHeight)
 
 function love.load()
 
@@ -76,6 +81,9 @@ function love.update(dt)
 
     canMoveDirection(ratatoskr, "dir")
 
+    -- Focus Camera on Player
+    cam:setPosition(gameWidth / 2, ratatoskr.y + TILE_SIZE / 2)
+
 end
 
 function love.draw()
@@ -85,31 +93,36 @@ function love.draw()
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("fill", 0,0, gameWidth,gameHeight)
 
-    -- Draw Yggdrasil
-    love.graphics.setColor(1, 1, 1)
-    for i,row in ipairs(yggdrasil.map) do
-        for j,tile in ipairs(row) do
-            if tile == 0 then love.graphics.draw(maze_tileset, yggdrasil.tiles.all_dir, ((j - 1)) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 1 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_right_down, ((j - 1)) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 2 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_right_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 3 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_right, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 4 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_down_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 5 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_down, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 6 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 7 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 8 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right_down_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 9 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right_down, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 10 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 11 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 12 then love.graphics.draw(maze_tileset, yggdrasil.tiles.down_left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 13 then love.graphics.draw(maze_tileset, yggdrasil.tiles.down, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 14 then love.graphics.draw(maze_tileset, yggdrasil.tiles.left, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-            if tile == 15 then love.graphics.draw(maze_tileset, yggdrasil.tiles.none, (j - 1) * TILE_SIZE, (i - 1) * TILE_SIZE) end
-        end
-    end
+    cam:draw(drawCameraStuff)
 
-    ratatoskr:draw()
+    hud:draw()
 
     push:apply("end")
 end
 
+function drawCameraStuff()
+    -- Draw Yggdrasil
+    love.graphics.setColor(1, 1, 1)
+    for i,row in ipairs(yggdrasil.map) do
+        for j,tile in ipairs(row) do
+            if tile == 0 then love.graphics.draw(maze_tileset, yggdrasil.tiles.all_dir, ((j - 1)) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 1 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_right_down, ((j - 1)) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 2 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_right_left, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 3 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_right, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 4 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_down_left, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 5 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_down, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 6 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up_left, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 7 then love.graphics.draw(maze_tileset, yggdrasil.tiles.up, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 8 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right_down_left, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 9 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right_down, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 10 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right_left, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 11 then love.graphics.draw(maze_tileset, yggdrasil.tiles.right, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 12 then love.graphics.draw(maze_tileset, yggdrasil.tiles.down_left, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 13 then love.graphics.draw(maze_tileset, yggdrasil.tiles.down, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 14 then love.graphics.draw(maze_tileset, yggdrasil.tiles.left, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+            if tile == 15 then love.graphics.draw(maze_tileset, yggdrasil.tiles.none, (j - 1) * TILE_SIZE + TILE_SIZE, (i - 1) * TILE_SIZE) end
+        end
+    end
+
+    ratatoskr:draw()
+end

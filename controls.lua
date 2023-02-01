@@ -20,23 +20,27 @@ function getKeyboardInput()
         end
         
         -- Jumping across gaps
-        if love.keyboard.isDown('lctrl') then 
+        if love.keyboard.isDown('lctrl') and ratatoskr.energy > ratatoskr.JUMP_DEPLETE then 
             if love.keyboard.isDown('up')then
                 ratatoskr.state = MOVING_NORTH
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y - TILE_SIZE
+                ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
             elseif love.keyboard.isDown('left')then
                 ratatoskr.state = MOVING_WEST
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x - TILE_SIZE
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y
+                ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
             elseif love.keyboard.isDown('down')then
                 ratatoskr.state = MOVING_SOUTH
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y + TILE_SIZE
+                ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
             elseif love.keyboard.isDown('right')then
                 ratatoskr.state = MOVING_EAST
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x + TILE_SIZE
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y
+                ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
             end
         end
     end
