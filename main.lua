@@ -82,8 +82,13 @@ function love.update(dt)
     canMoveDirection(ratatoskr, "dir")
 
     -- Focus Camera on Player
-    cam:setPosition(gameWidth / 2, ratatoskr.y + TILE_SIZE / 2)
-
+    if ratatoskr.y / TILE_SIZE > TREE_HEIGHT - gameHeight / TILE_SIZE / 2 then
+        cam:setPosition(gameWidth / 2, TREE_HEIGHT * TILE_SIZE - gameHeight / 2 + TILE_SIZE)
+    elseif ratatoskr.y / TILE_SIZE < 0 + gameHeight / TILE_SIZE / 2 then
+        cam:setPosition(gameWidth / 2, 0 + gameHeight / 2)
+    else
+        cam:setPosition(gameWidth / 2, ratatoskr.y + TILE_SIZE / 2)
+    end
 end
 
 function love.draw()
