@@ -58,6 +58,9 @@ function love.load()
     -- Ratatoskr Code
     require('ratatoskr')
 
+    -- Beetle Code
+    require('beetle')
+
     -- HUD code
     require('hud')
 
@@ -66,6 +69,9 @@ function love.load()
     
     -- Generate Yggdrasil
     yggdrasil:new_map(TREE_WIDTH, TREE_HEIGHT)
+
+    -- Spawn Beetles
+    spawn_beetles(10)
 
     -- Debug
     
@@ -79,7 +85,8 @@ function love.update(dt)
     -- Update Ratatoskr
     ratatoskr:update(dt)
 
-    canMoveDirection(ratatoskr, "dir")
+    -- Update Beetles
+    update_beetles(dt)
 
     -- Focus Camera on Player
     if ratatoskr.y / TILE_SIZE > TREE_HEIGHT - gameHeight / TILE_SIZE / 2 then
@@ -130,4 +137,6 @@ function drawCameraStuff()
     end
 
     ratatoskr:draw()
+
+    draw_beetles()
 end

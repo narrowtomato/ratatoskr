@@ -1,6 +1,6 @@
 ratatoskr = {}
 
-ratatoskr.ENERGY_GAIN_RATE = 1
+ratatoskr.ENERGY_GAIN_RATE = 500
 ratatoskr.MAX_ENERGY = 1000
 ratatoskr.JUMP_DEPLETE = 500
 
@@ -48,10 +48,8 @@ function ratatoskr:update(dt)
 
     -- Restore Energy
     if ratatoskr.energy < ratatoskr.MAX_ENERGY then
-        ratatoskr.energy = ratatoskr.energy + ratatoskr.ENERGY_GAIN_RATE
+        ratatoskr.energy = ratatoskr.energy + ratatoskr.ENERGY_GAIN_RATE * dt
     end
-
-    print(ratatoskr.energy)
 end
 
 function ratatoskr:draw()
