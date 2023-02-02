@@ -21,22 +21,28 @@ function getKeyboardInput()
         
         -- Jumping across gaps
         if love.keyboard.isDown('lctrl') and ratatoskr.energy > ratatoskr.JUMP_DEPLETE then 
-            if love.keyboard.isDown('up')then
+            
+            -- Get the maze position to determine if on edge
+            local maze_position = {}
+            maze_position.x = ratatoskr.lastpos.x / TILE_SIZE + 1
+            maze_position.y = ratatoskr.lastpos.y / TILE_SIZE 
+            
+            if love.keyboard.isDown('up') and maze_position.y > 1 then
                 ratatoskr.state = MOVING_NORTH
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y - TILE_SIZE
                 ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
-            elseif love.keyboard.isDown('left')then
+            elseif love.keyboard.isDown('left') and maze_position.x > 1 then
                 ratatoskr.state = MOVING_WEST
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x - TILE_SIZE
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y
                 ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
-            elseif love.keyboard.isDown('down')then
+            elseif love.keyboard.isDown('down') and maze_position.y < TREE_HEIGHT then
                 ratatoskr.state = MOVING_SOUTH
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y + TILE_SIZE
                 ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
-            elseif love.keyboard.isDown('right')then
+            elseif love.keyboard.isDown('right') and maze_position.x < TREE_WIDTH then
                 ratatoskr.state = MOVING_EAST
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x + TILE_SIZE
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y

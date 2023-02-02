@@ -74,7 +74,7 @@ function love.load()
     yggdrasil:new_map(TREE_WIDTH, TREE_HEIGHT)
 
     -- Spawn Beetles
-    spawn_beetles(50)
+    spawn_beetles(25)
 
     -- Debug
     
