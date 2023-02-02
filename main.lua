@@ -4,12 +4,15 @@ require('lib/table_utils')
 -- Maze Generation Library
 require('mazegen')
 
+-- Animation library
+anim8 = require 'lib/anim8-master/anim8'
+
 -- Push library to scale up our pixel art correctly
 local push = require('lib/push')
 
 love.graphics.setDefaultFilter("nearest", "nearest") --disable blurry scaling
 
-TILE_SIZE = 4
+TILE_SIZE = 32
 TREE_WIDTH = 10
 TREE_HEIGHT = 50
 
@@ -71,13 +74,18 @@ function love.load()
     yggdrasil:new_map(TREE_WIDTH, TREE_HEIGHT)
 
     -- Spawn Beetles
-    spawn_beetles(10)
+    spawn_beetles(50)
 
     -- Debug
     
 end
 
 function love.update(dt)
+
+    -- Update Animations
+    if ratatoskr.state ~= WAITING then
+        ratatoskr_animation:update(dt)
+    end
 
     -- Get Control Input
     getKeyboardInput()

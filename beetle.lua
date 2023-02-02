@@ -20,11 +20,8 @@ function update_beetles(dt)
                 beetle.nextpos.x = beetle.lastpos.x + TILE_SIZE
                 beetle.nextpos.y = beetle.lastpos.y
             else
-                if beetle.attempting_direction == "up" then beetle.attempting_direction = "left" 
-                elseif beetle.attempting_direction == "left" then beetle.attempting_direction = "down"
-                elseif beetle.attempting_direction == "down" then beetle.attempting_direction = "right"
-                elseif beetle.attempting_direction == "right" then beetle.attempting_direction = "up" 
-                end
+                local dirs = {"up", "down", "left", "right"}
+                beetle.attempting_direction = dirs[love.math.random(1, 4)]
             end
         elseif beetle.state == MOVING_NORTH then
             beetle.y = beetle.y - beetle.speed * dt
@@ -70,7 +67,7 @@ function spawn_beetles(number)
         local beetle = {
             x = love.math.random(1, TREE_WIDTH - 1) * TILE_SIZE,
             y = love.math.random(1, TREE_HEIGHT) * TILE_SIZE,
-            speed = 5,
+            speed = 50,
             state = WAITING,
             nextpos = {x=x,y=y},
             attempting_direction = "up"
