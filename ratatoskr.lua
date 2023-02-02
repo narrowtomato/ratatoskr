@@ -6,6 +6,7 @@ ratatoskr.JUMP_DEPLETE = 500
 
 ratatoskr.x = math.floor(TREE_WIDTH / 2) * TILE_SIZE
 ratatoskr.y = TREE_HEIGHT * TILE_SIZE
+ratatoskr.radius = 10
 ratatoskr.speed = 150
 ratatoskr.state = WAITING
 ratatoskr.lastpos = {x=ratatoskr.x,y=ratatoskr.y}
@@ -55,12 +56,31 @@ function ratatoskr:update(dt)
     if ratatoskr.energy < ratatoskr.MAX_ENERGY then
         ratatoskr.energy = ratatoskr.energy + ratatoskr.ENERGY_GAIN_RATE * dt
     end
+
+    -- Detect collisions with enemy
+    for k,beetle in pairs(beetles) do
+        if distanceBetween(ratatoskr.x, ratatoskr.y, beetle.x, beetle.y) < ratatoskr.radius + beetle.radius then
+            ratatoskr.state = DEAD
+        end
+    end
+
+    -- Spin when dead
+    if ratatoskr.state == DEAD then
+        ratatoskr.angle = love.math.random(0, math.pi * 2)
+    end
 end
 
 function ratatoskr:draw()
     -- love.graphics.setColor(255/255, 204/255, 0/255)
     -- love.graphics.rectangle("fill", self.x + (TILE_SIZE / 4) + TILE_SIZE, self.y - (TILE_SIZE / 4 * 3), TILE_SIZE / 2, TILE_SIZE / 2)
 
-    love.graphics.setColor(1, 1, 1)
-    ratatoskr_animation:draw(ratatoskr_image, self.x + TILE_SIZE / 2 + TILE_SIZE, self.y - TILE_SIZE / 2, ratatoskr.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)
-end
+    if ratatoskr.state == DEAD then 
+        love.graphics.setColor(1, 0.5, 0.5)
+        ratatoskr_animation:draw(ratatoskr_image, self.x + TILE_SIZE / 2 + TILE_SIZE, self.y - TILE_SIZE / 2, ratatoskr.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)    
+    else
+        love.graphics.setColor(1, 1, 1)
+        ratatoskr_animation:draw(ratatoskr_image, self.x + TILE_SIZE / 2 + TILE_SIZE, self.y - TILE_SIZE / 2, ratatoskr.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)    
+    end
+
+
+    end
