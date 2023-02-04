@@ -72,20 +72,7 @@ function ratatoskr:update(dt)
         ratatoskr.death_timer = ratatoskr.death_timer - dt
 
         if ratatoskr.death_timer < 0 then
-            yggdrasil:new_map(TREE_WIDTH, TREE_HEIGHT)
-            ratatoskr.angle = 0
-            ratatoskr.state = WAITING
-            ratatoskr.x = math.floor(TREE_WIDTH / 2) * TILE_SIZE
-            ratatoskr.y = TREE_HEIGHT * TILE_SIZE
-            ratatoskr.lastpos = {x=ratatoskr.x,y=ratatoskr.y}
-            ratatoskr.nextpos = {x=ratatoskr.x,y=ratatoskr.y}
-            ratatoskr.death_timer = 2
-
-            -- Empty the beetles table
-            destroy_all_beetles()
-
-            -- Spawn New Beetles
-            spawn_beetles(25)
+            newStage(true)
         end
     end
 end

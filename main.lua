@@ -57,6 +57,10 @@ function love.load()
     -- Make sure numbers are truly random
     math.randomseed(os.time())
 
+    -- Joystick setup
+    joysticks = love.joystick.getJoysticks()
+    joystick = joysticks[1]
+
     -- Load images and set up animations
     require('imageload')
 
@@ -75,21 +79,29 @@ function love.load()
     -- Controls Code
     require('controls')
     
-    -- Generate Yggdrasil
-    yggdrasil:new_map(TREE_WIDTH, TREE_HEIGHT)
-
-    -- Spawn Beetles
-    spawn_beetles(25)
-
-    gameState = RUNNING
+    -- Initial variables
+    gameState = TITLE
+    stage = 0
+    menu_input_buffer_timer = 1
     -- Debug
     
 end
 
 function love.update(dt)
 
-    if love.keyboard.isDown('lctrl') then
-        gameState = RUNNING
+    if gameState == TITLE then
+        if love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a")) then
+            gameState = TUTORIAL
+            menu_input_buffer_timer = 1
+            TREE_WIDTH = 10
+            TREE_HEIGHT = 50
+        end
+    elseif gameState == TUTORIAL then 
+        menu_input_buffer_timer = menu_input_buffer_timer - dt
+        if menu_input_buffer_timer < 0 and (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) then
+            gameState = RUNNING
+            newStage()
+        end
     elseif gameState == RUNNING then
         -- Update Animations
         if ratatoskr.state ~= WAITING then
@@ -121,10 +133,10 @@ function love.draw()
 
     if gameState == TITLE then
         love.graphics.setColor(1, 1, 1)
-        love.graphics.print("Press Control to Begin")
+        love.graphics.print("Press Space to Begin")
     elseif gameState == TUTORIAL then
         love.graphics.setColor(1, 1, 1)
-        love.graphics.print("Arrow Keys Move, Hold Left Control To Jump In A Direction")
+        love.graphics.print("Arrow Keys/D-Pad Move, Hold Space/A/X To Jump In A Direction")
     elseif gameState == RUNNING then
         -- Draw Background
         love.graphics.setColor(0, 0, 0)
@@ -172,4 +184,43 @@ end
 -- Calculates distance between two points
 function distanceBetween(x1, y1, x2, y2)
     return math.sqrt( (x2 - x1)^2 + (y2 - y1)^2 )
+end
+
+function newStage(reset)
+
+    -- If not resetting the current stage, increment the stage counter
+    -- and make the tree bigger
+    if not reset then 
+        stage = stage + 1
+        if stage > 1 then
+            TREE_WIDTH = TREE_WIDTH + 1
+            TREE_HEIGHT = TREE_HEIGHT + 10
+        end
+    end
+
+    -- Generate Yggdrasil
+    yggdrasil:new_map(TREE_WIDTH, TREE_HEIGHT)
+
+    -- Reset Ratatoskr
+    ratatoskr.angle = 0
+    ratatoskr.state = WAITING
+
+    -- For odd numbered stages, put ratatoskr at the bottom, for even at top
+    if stage % 2 ~= 0 then
+        ratatoskr.x = math.floor(TREE_WIDTH / 2) * TILE_SIZE
+        ratatoskr.y = TREE_HEIGHT * TILE_SIZE
+    else
+        ratatoskr.x = math.floor(TREE_WIDTH / 2) * TILE_SIZE
+        ratatoskr.y = 0
+    end
+    print(ratatoskr.x, ratatoskr.y)
+    ratatoskr.lastpos = {x=ratatoskr.x,y=ratatoskr.y}
+    ratatoskr.nextpos = {x=ratatoskr.x,y=ratatoskr.y}
+    ratatoskr.death_timer = 2
+
+    -- Empty the beetles table
+    destroy_all_beetles()
+
+    -- Spawn New Beetles
+    spawn_beetles(25)
 end
