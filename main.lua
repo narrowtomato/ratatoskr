@@ -39,6 +39,11 @@ cam:setWindow(0,0,gameWidth,gameHeight)
 
 function love.load()
 
+    -- Games States
+    TITLE = 1
+    TUTORIAL = 2
+    RUNNING = 3
+
     -- Entity States
     WAITING = 1
     MOVING_NORTH = 2
@@ -76,46 +81,54 @@ function love.load()
     -- Spawn Beetles
     spawn_beetles(25)
 
+
+    gameState = RUNNING
     -- Debug
     
 end
 
 function love.update(dt)
 
-    -- Update Animations
-    if ratatoskr.state ~= WAITING then
-        ratatoskr_animation:update(dt)
-    end
+    if gameState == RUNNING then
+        -- Update Animations
+        if ratatoskr.state ~= WAITING then
+            ratatoskr_animation:update(dt)
+        end
 
-    -- Get Control Input
-    getKeyboardInput()
+        -- Get Control Input
+        getKeyboardInput()
 
-    -- Update Ratatoskr
-    ratatoskr:update(dt)
+        -- Update Ratatoskr
+        ratatoskr:update(dt)
 
-    -- Update Beetles
-    update_beetles(dt)
+        -- Update Beetles
+        update_beetles(dt)
 
-    -- Focus Camera on Player
-    if ratatoskr.y / TILE_SIZE > TREE_HEIGHT - gameHeight / TILE_SIZE / 2 then
-        cam:setPosition(gameWidth / 2, TREE_HEIGHT * TILE_SIZE - gameHeight / 2 + TILE_SIZE)
-    elseif ratatoskr.y / TILE_SIZE < 0 + gameHeight / TILE_SIZE / 2 then
-        cam:setPosition(gameWidth / 2, 0 + gameHeight / 2)
-    else
-        cam:setPosition(gameWidth / 2, ratatoskr.y + TILE_SIZE / 2)
+        -- Focus Camera on Player
+        if ratatoskr.y / TILE_SIZE > TREE_HEIGHT - gameHeight / TILE_SIZE / 2 then
+            cam:setPosition(gameWidth / 2, TREE_HEIGHT * TILE_SIZE - gameHeight / 2 + TILE_SIZE)
+        elseif ratatoskr.y / TILE_SIZE < 0 + gameHeight / TILE_SIZE / 2 then
+            cam:setPosition(gameWidth / 2, 0 + gameHeight / 2)
+        else
+            cam:setPosition(gameWidth / 2, ratatoskr.y + TILE_SIZE / 2)
+        end
     end
 end
 
 function love.draw()
     push:apply("start")
 
-    -- Draw Background
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.rectangle("fill", 0,0, gameWidth,gameHeight)
+    if gameState == RUNNING then
+        -- Draw Background
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.rectangle("fill", 0,0, gameWidth,gameHeight)
 
-    cam:draw(drawCameraStuff)
+        -- Draw Camera Stuff
+        cam:draw(drawCameraStuff)
 
-    hud:draw()
+        -- Draw HUD
+        hud:draw()
+    end
 
     push:apply("end")
 end

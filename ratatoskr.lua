@@ -1,9 +1,11 @@
 ratatoskr = {}
 
 ratatoskr.ENERGY_GAIN_RATE = 500
-ratatoskr.MAX_ENERGY = 1000
-ratatoskr.JUMP_DEPLETE = 500
+ratatoskr.MAX_ENERGY = 500
+ratatoskr.JUMP_DEPLETE = 499
 
+
+ratatoskr.death_timer = 2
 ratatoskr.x = math.floor(TREE_WIDTH / 2) * TILE_SIZE
 ratatoskr.y = TREE_HEIGHT * TILE_SIZE
 ratatoskr.radius = 10
@@ -67,13 +69,27 @@ function ratatoskr:update(dt)
     -- Spin when dead
     if ratatoskr.state == DEAD then
         ratatoskr.angle = love.math.random(0, math.pi * 2)
+        ratatoskr.death_timer = ratatoskr.death_timer - dt
+
+        if ratatoskr.death_timer < 0 then
+            yggdrasil:new_map(TREE_WIDTH, TREE_HEIGHT)
+            ratatoskr.angle = 0
+            ratatoskr.state = WAITING
+            ratatoskr.x = math.floor(TREE_WIDTH / 2) * TILE_SIZE
+            ratatoskr.y = TREE_HEIGHT * TILE_SIZE
+            ratatoskr.lastpos = {x=ratatoskr.x,y=ratatoskr.y}
+            ratatoskr.nextpos = {x=ratatoskr.x,y=ratatoskr.y}
+
+            -- Empty the beetles table
+            destroy_all_beetles()
+
+            -- Spawn New Beetles
+            spawn_beetles(25)
+        end
     end
 end
 
 function ratatoskr:draw()
-    -- love.graphics.setColor(255/255, 204/255, 0/255)
-    -- love.graphics.rectangle("fill", self.x + (TILE_SIZE / 4) + TILE_SIZE, self.y - (TILE_SIZE / 4 * 3), TILE_SIZE / 2, TILE_SIZE / 2)
-
     if ratatoskr.state == DEAD then 
         love.graphics.setColor(1, 0.5, 0.5)
         ratatoskr_animation:draw(ratatoskr_image, self.x + TILE_SIZE / 2 + TILE_SIZE, self.y - TILE_SIZE / 2, ratatoskr.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)    
@@ -83,4 +99,4 @@ function ratatoskr:draw()
     end
 
 
-    end
+end

@@ -77,3 +77,9 @@ function spawn_beetles(number)
         table.insert(beetles, beetle)
     end
 end
+
+function destroy_all_beetles()
+    for i=#beetles, 1, -1 do
+        table.remove(beetles, i)
+    end
+end
