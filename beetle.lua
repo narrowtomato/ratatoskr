@@ -62,13 +62,13 @@ function draw_beetles()
     end
 end
 
-function spawn_beetles(number)
+function spawn_beetles(number, mov_speed)
     for i=1, number, 1 do 
         local beetle = {
             x = love.math.random(1, TREE_WIDTH - 1) * TILE_SIZE,
             y = love.math.random(3, TREE_HEIGHT - 3) * TILE_SIZE,
             radius = 10,
-            speed = 50,
+            speed = mov_speed,
             state = WAITING,
             nextpos = {x=x,y=y},
             attempting_direction = "up"

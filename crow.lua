@@ -35,13 +35,13 @@ function draw_crows()
     end
 end
 
-function spawn_crows(number)
+function spawn_crows(number, mov_speed)
     for i=1, number, 1 do 
         local crow = {
             x = love.math.random(0, 1) * (TREE_WIDTH + 1) * TILE_SIZE - TILE_SIZE,
             y = love.math.random(3, TREE_HEIGHT - 3) * TILE_SIZE,
             radius = 10,
-            speed = 100,
+            speed = mov_speed,
             state = WAITING
         }
         table.insert(crows, crow)

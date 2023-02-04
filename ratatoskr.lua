@@ -86,11 +86,11 @@ function ratatoskr:update(dt)
         local maze_position_y = ratatoskr.lastpos.y / TILE_SIZE 
         if stage % 2 ~= 0 then
             if maze_position_y == 1 then
-                newStage()
+                gameState = INTERMISSION
             end
         else
             if maze_position_y == TREE_HEIGHT then
-                newStage()
+                gameState = INTERMISSION
             end
         end
     end

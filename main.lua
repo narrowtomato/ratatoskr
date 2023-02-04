@@ -14,7 +14,7 @@ love.graphics.setDefaultFilter("nearest", "nearest") --disable blurry scaling
 
 TILE_SIZE = 32
 TREE_WIDTH = 10
-TREE_HEIGHT = 50
+TREE_HEIGHT = 30
 
 gameWidth, gameHeight = TREE_WIDTH * TILE_SIZE + TILE_SIZE * 2, TREE_WIDTH * TILE_SIZE + TILE_SIZE * 2
 
@@ -43,7 +43,8 @@ function love.load()
     TITLE = 1
     TUTORIAL = 2
     RUNNING = 3
-    END = 4
+    INTERMISSION = 4
+    END = 5
 
     -- Entity States
     WAITING = 1
@@ -99,11 +100,17 @@ function love.update(dt)
             gameState = TUTORIAL
             menu_input_buffer_timer = 0.5
             TREE_WIDTH = 10
-            TREE_HEIGHT = 50
-            total_beetles = 25
+            TREE_HEIGHT = 30
             stage = 0
         end
     elseif gameState == TUTORIAL then 
+        menu_input_buffer_timer = menu_input_buffer_timer - dt
+        if menu_input_buffer_timer < 0 and (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) then
+            menu_input_buffer_timer = 0.5
+            gameState = RUNNING
+            newStage()
+        end
+    elseif gameState == INTERMISSION then
         menu_input_buffer_timer = menu_input_buffer_timer - dt
         if menu_input_buffer_timer < 0 and (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) then
             menu_input_buffer_timer = 0.5
@@ -152,6 +159,15 @@ function love.draw()
         love.graphics.setColor(1, 1, 1)
         love.graphics.print("Arrow Keys/D-Pad Move")
         love.graphics.print("Hold Space/A/X To Jump", 0, 50)
+    elseif gameState == INTERMISSION then
+        love.graphics.setColor(1, 1, 1)
+        if stage % 2 ~= 0 then
+            love.graphics.print("You Reached The Top")
+            love.graphics.print("Press Jump for the next Stage", 0, 50)
+        else
+            love.graphics.print("You Reached The Bottom")
+            love.graphics.print("Press Jump for the next Stage", 0, 50)
+        end
     elseif gameState == END then
         love.graphics.setColor(1, 1, 1)
         love.graphics.print("GAME OVER")
@@ -208,17 +224,9 @@ function distanceBetween(x1, y1, x2, y2)
     return math.sqrt( (x2 - x1)^2 + (y2 - y1)^2 )
 end
 
-function newStage(reset)
+function newStage()
 
-    -- If not resetting the current stage, increment the stage counter
-    -- and make the tree bigger
-    if not reset then 
-        stage = stage + 1
-        total_beetles = total_beetles + 10
-        if stage > 1 then
-            TREE_HEIGHT = TREE_HEIGHT + 10
-        end
-    end
+    stage = stage + 1
 
     -- Generate Yggdrasil
     yggdrasil:new_map(TREE_WIDTH, TREE_HEIGHT)
@@ -241,9 +249,9 @@ function newStage(reset)
 
     -- Empty and spawn new beetles
     destroy_all_beetles()
-    spawn_beetles(total_beetles)
+    spawn_beetles(stage * 10, stage * 20)
 
     -- Empty and spawn new crows
     destroy_all_crows()
-    spawn_crows((stage + 1) * 2)
+    spawn_crows(stage, stage * 70)
 end
