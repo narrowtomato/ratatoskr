@@ -34,7 +34,7 @@ end
 
 -- Camera Library
 gamera = require 'lib/gamera-master/gamera'
-cam = gamera.new(-200, -200, 2000, 2000)
+cam = gamera.new(0, -200, 2000, 90000)
 cam:setWindow(0,0,gameWidth,gameHeight)
 
 function love.load()
@@ -95,6 +95,7 @@ function love.update(dt)
             menu_input_buffer_timer = 1
             TREE_WIDTH = 10
             TREE_HEIGHT = 50
+            total_beetles = 25
         end
     elseif gameState == TUTORIAL then 
         menu_input_buffer_timer = menu_input_buffer_timer - dt
@@ -118,13 +119,8 @@ function love.update(dt)
         update_beetles(dt)
 
         -- Focus Camera on Player
-        if ratatoskr.y / TILE_SIZE > TREE_HEIGHT - gameHeight / TILE_SIZE / 2 then
-            cam:setPosition(gameWidth / 2, TREE_HEIGHT * TILE_SIZE - gameHeight / 2 + TILE_SIZE)
-        elseif ratatoskr.y / TILE_SIZE < 0 + gameHeight / TILE_SIZE / 2 then
-            cam:setPosition(gameWidth / 2, 0 + gameHeight / 2)
-        else
-            cam:setPosition(gameWidth / 2, ratatoskr.y + TILE_SIZE / 2)
-        end
+        cam:setPosition(gameWidth / 2, ratatoskr.y)
+        
     end
 end
 
@@ -192,8 +188,8 @@ function newStage(reset)
     -- and make the tree bigger
     if not reset then 
         stage = stage + 1
+        total_beetles = total_beetles + 10
         if stage > 1 then
-            TREE_WIDTH = TREE_WIDTH + 1
             TREE_HEIGHT = TREE_HEIGHT + 10
         end
     end
@@ -201,19 +197,18 @@ function newStage(reset)
     -- Generate Yggdrasil
     yggdrasil:new_map(TREE_WIDTH, TREE_HEIGHT)
 
-    -- Reset Ratatoskr
-    ratatoskr.angle = 0
-    ratatoskr.state = WAITING
-
     -- For odd numbered stages, put ratatoskr at the bottom, for even at top
     if stage % 2 ~= 0 then
         ratatoskr.x = math.floor(TREE_WIDTH / 2) * TILE_SIZE
         ratatoskr.y = TREE_HEIGHT * TILE_SIZE
     else
         ratatoskr.x = math.floor(TREE_WIDTH / 2) * TILE_SIZE
-        ratatoskr.y = 0
+        ratatoskr.y = TILE_SIZE
     end
-    print(ratatoskr.x, ratatoskr.y)
+
+    -- Reset Ratatoskr
+    ratatoskr.angle = 0
+    ratatoskr.state = WAITING
     ratatoskr.lastpos = {x=ratatoskr.x,y=ratatoskr.y}
     ratatoskr.nextpos = {x=ratatoskr.x,y=ratatoskr.y}
     ratatoskr.death_timer = 2
@@ -222,5 +217,5 @@ function newStage(reset)
     destroy_all_beetles()
 
     -- Spawn New Beetles
-    spawn_beetles(25)
+    spawn_beetles(total_beetles)
 end

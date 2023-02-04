@@ -1,19 +1,19 @@
 function getKeyboardInput()
     if ratatoskr.state == WAITING then
         -- Initiating movement across branches
-        if love.keyboard.isDown('up') or (joystick and joystick:isGamepadDown("dpup")) and canMoveDirection(ratatoskr, "up") then
+        if (love.keyboard.isDown('up') or (joystick and joystick:isGamepadDown("dpup"))) and canMoveDirection(ratatoskr, "up") then
             ratatoskr.state = MOVING_NORTH
             ratatoskr.nextpos.x = ratatoskr.lastpos.x
             ratatoskr.nextpos.y = ratatoskr.lastpos.y - TILE_SIZE
-        elseif love.keyboard.isDown('left') or (joystick and joystick:isGamepadDown("dpleft")) and canMoveDirection(ratatoskr, "left") then
+        elseif (love.keyboard.isDown('left') or (joystick and joystick:isGamepadDown("dpleft"))) and canMoveDirection(ratatoskr, "left") then
             ratatoskr.state = MOVING_WEST
             ratatoskr.nextpos.x = ratatoskr.lastpos.x - TILE_SIZE
             ratatoskr.nextpos.y = ratatoskr.lastpos.y
-        elseif love.keyboard.isDown('down') or (joystick and joystick:isGamepadDown("dpdown")) and canMoveDirection(ratatoskr, "down") then
+        elseif (love.keyboard.isDown('down') or (joystick and joystick:isGamepadDown("dpdown"))) and canMoveDirection(ratatoskr, "down") then
             ratatoskr.state = MOVING_SOUTH
             ratatoskr.nextpos.x = ratatoskr.lastpos.x
             ratatoskr.nextpos.y = ratatoskr.lastpos.y + TILE_SIZE
-        elseif love.keyboard.isDown('right') or (joystick and joystick:isGamepadDown("dpright")) and canMoveDirection(ratatoskr, "right") then
+        elseif (love.keyboard.isDown('right') or (joystick and joystick:isGamepadDown("dpright"))) and canMoveDirection(ratatoskr, "right") then
             ratatoskr.state = MOVING_EAST
             ratatoskr.nextpos.x = ratatoskr.lastpos.x + TILE_SIZE
             ratatoskr.nextpos.y = ratatoskr.lastpos.y

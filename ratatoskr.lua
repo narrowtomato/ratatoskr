@@ -16,8 +16,6 @@ ratatoskr.nextpos = {x=ratatoskr.x,y=ratatoskr.y}
 ratatoskr.energy = ratatoskr.MAX_ENERGY
 ratatoskr.angle = 0
 
-
-
 function ratatoskr:update(dt)
     -- ratatoskr movement
     if ratatoskr.state == MOVING_NORTH then
@@ -75,6 +73,21 @@ function ratatoskr:update(dt)
             newStage(true)
         end
     end
+
+    -- Detect stage win state
+    if ratatoskr.state == WAITING then 
+        -- Get the maze y position to determine if on edge
+        local maze_position_y = ratatoskr.lastpos.y / TILE_SIZE 
+        if stage % 2 ~= 0 then
+            if maze_position_y == 1 then
+                newStage()
+            end
+        else
+            if maze_position_y == TREE_HEIGHT then
+                newStage()
+            end
+        end
+    end
 end
 
 function ratatoskr:draw()
@@ -85,6 +98,4 @@ function ratatoskr:draw()
         love.graphics.setColor(1, 1, 1)
         ratatoskr_animation:draw(ratatoskr_image, self.x + TILE_SIZE / 2 + TILE_SIZE, self.y - TILE_SIZE / 2, ratatoskr.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)    
     end
-
-
 end
