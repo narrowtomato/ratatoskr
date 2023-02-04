@@ -64,6 +64,12 @@ function ratatoskr:update(dt)
         end
     end
 
+    for k,crow in pairs(crows) do
+        if distanceBetween(ratatoskr.x, ratatoskr.y, crow.x, crow.y) < ratatoskr.radius + crow.radius then
+            ratatoskr.state = DEAD
+        end
+    end
+
     -- Spin when dead
     if ratatoskr.state == DEAD then
         ratatoskr.angle = love.math.random(0, math.pi * 2)

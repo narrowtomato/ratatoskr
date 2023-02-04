@@ -74,6 +74,9 @@ function love.load()
     -- Beetle Code
     require('beetle')
 
+    -- Crow Code
+    require('crow')
+
     -- HUD code
     require('hud')
 
@@ -128,6 +131,9 @@ function love.update(dt)
 
         -- Update Beetles
         update_beetles(dt)
+
+        -- Update Crows
+        update_crows(dt)
 
         -- Focus Camera on Player
         cam:setPosition(gameWidth / 2, ratatoskr.y)
@@ -193,6 +199,8 @@ function drawCameraStuff()
     ratatoskr:draw()
 
     draw_beetles()
+
+    draw_crows()
 end
 
 -- Calculates distance between two points
@@ -231,9 +239,11 @@ function newStage(reset)
     ratatoskr.nextpos = {x=ratatoskr.x,y=ratatoskr.y}
     ratatoskr.death_timer = 2
 
-    -- Empty the beetles table
+    -- Empty and spawn new beetles
     destroy_all_beetles()
-
-    -- Spawn New Beetles
     spawn_beetles(total_beetles)
+
+    -- Empty and spawn new crows
+    destroy_all_crows()
+    spawn_crows((stage + 1) * 2)
 end
