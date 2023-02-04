@@ -81,13 +81,14 @@ function love.load()
     -- Spawn Beetles
     spawn_beetles(25)
 
-
     gameState = RUNNING
     -- Debug
     
 end
 
 function love.update(dt)
+
+    if love.keyboard.isDown('lctrl')
 
     if gameState == RUNNING then
         -- Update Animations
@@ -118,7 +119,13 @@ end
 function love.draw()
     push:apply("start")
 
-    if gameState == RUNNING then
+    if gameState == TITLE then
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print("Press Control to Begin")
+    elseif gameState == TUTORIAL then
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print("Arrow Keys Move, Hold Left Control To Jump In A Direction")
+    elseif gameState == RUNNING then
         -- Draw Background
         love.graphics.setColor(0, 0, 0)
         love.graphics.rectangle("fill", 0,0, gameWidth,gameHeight)

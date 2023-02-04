@@ -79,6 +79,7 @@ function ratatoskr:update(dt)
             ratatoskr.y = TREE_HEIGHT * TILE_SIZE
             ratatoskr.lastpos = {x=ratatoskr.x,y=ratatoskr.y}
             ratatoskr.nextpos = {x=ratatoskr.x,y=ratatoskr.y}
+            ratatoskr.death_timer = 2
 
             -- Empty the beetles table
             destroy_all_beetles()
