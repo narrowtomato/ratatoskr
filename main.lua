@@ -88,9 +88,9 @@ end
 
 function love.update(dt)
 
-    if love.keyboard.isDown('lctrl')
-
-    if gameState == RUNNING then
+    if love.keyboard.isDown('lctrl') then
+        gameState = RUNNING
+    elseif gameState == RUNNING then
         -- Update Animations
         if ratatoskr.state ~= WAITING then
             ratatoskr_animation:update(dt)
