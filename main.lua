@@ -63,6 +63,13 @@ function love.load()
     joysticks = love.joystick.getJoysticks()
     joystick = joysticks[1]
 
+    -- Sound Setup
+    sounds = {}
+
+    sounds.music = love.audio.newSource("sound/song1.wav", "stream")
+    sounds.hurt = love.audio.newSource("sound/squirrel_hurt1.wav", "static")
+    sounds.jump =  love.audio.newSource("sound/squirrel_jump1.wav", "static")
+
     -- Load images and set up animations
     require('imageload')
 
@@ -118,6 +125,9 @@ function love.update(dt)
             newStage()
         end
     elseif gameState == END then 
+        if sounds.music:isPlaying() then
+            love.audio.stop()
+        end
         menu_input_buffer_timer = menu_input_buffer_timer - dt
         if menu_input_buffer_timer < 0 and (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) then
             menu_input_buffer_timer = 0.5
@@ -125,6 +135,12 @@ function love.update(dt)
             newStage()
         end
     elseif gameState == RUNNING then
+
+        -- Play Music
+        if not sounds.music:isPlaying() then
+            love.audio.play(sounds.music)
+        end
+
         -- Update Animations
         if ratatoskr.state ~= WAITING then
             ratatoskr_animation:update(dt)

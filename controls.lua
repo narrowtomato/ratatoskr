@@ -32,21 +32,25 @@ function getKeyboardInput()
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y - TILE_SIZE
                 ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
+                sounds.jump:play()
             elseif love.keyboard.isDown('left') or (joystick and joystick:isGamepadDown("dpleft")) and maze_position.x > 1 then
                 ratatoskr.state = MOVING_WEST
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x - TILE_SIZE
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y
                 ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
+                sounds.jump:play()
             elseif love.keyboard.isDown('down') or (joystick and joystick:isGamepadDown("dpdown")) and maze_position.y < TREE_HEIGHT then
                 ratatoskr.state = MOVING_SOUTH
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y + TILE_SIZE
                 ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
+                sounds.jump:play()
             elseif love.keyboard.isDown('right') or (joystick and joystick:isGamepadDown("dpright")) and maze_position.x < TREE_WIDTH then
                 ratatoskr.state = MOVING_EAST
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x + TILE_SIZE
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y
                 ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
+                sounds.jump:play()
             end
         end
     end

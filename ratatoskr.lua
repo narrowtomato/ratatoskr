@@ -61,12 +61,14 @@ function ratatoskr:update(dt)
     for k,beetle in pairs(beetles) do
         if distanceBetween(ratatoskr.x, ratatoskr.y, beetle.x, beetle.y) < ratatoskr.radius + beetle.radius then
             ratatoskr.state = DEAD
+            sounds.hurt:play()
         end
     end
 
     for k,crow in pairs(crows) do
         if distanceBetween(ratatoskr.x, ratatoskr.y, crow.x, crow.y) < ratatoskr.radius + crow.radius then
             ratatoskr.state = DEAD
+            sounds.hurt:play()
         end
     end
 
