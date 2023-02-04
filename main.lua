@@ -43,6 +43,7 @@ function love.load()
     TITLE = 1
     TUTORIAL = 2
     RUNNING = 3
+    END = 4
 
     -- Entity States
     WAITING = 1
@@ -82,7 +83,7 @@ function love.load()
     -- Initial variables
     gameState = TITLE
     stage = 0
-    menu_input_buffer_timer = 1
+    menu_input_buffer_timer = 0.5
     -- Debug
     
 end
@@ -90,17 +91,27 @@ end
 function love.update(dt)
 
     if gameState == TITLE then
-        if love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a")) then
+        menu_input_buffer_timer = menu_input_buffer_timer - dt
+        if menu_input_buffer_timer < 0 and (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) then
             gameState = TUTORIAL
-            menu_input_buffer_timer = 1
+            menu_input_buffer_timer = 0.5
             TREE_WIDTH = 10
             TREE_HEIGHT = 50
             total_beetles = 25
+            stage = 0
         end
     elseif gameState == TUTORIAL then 
         menu_input_buffer_timer = menu_input_buffer_timer - dt
         if menu_input_buffer_timer < 0 and (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) then
+            menu_input_buffer_timer = 0.5
             gameState = RUNNING
+            newStage()
+        end
+    elseif gameState == END then 
+        menu_input_buffer_timer = menu_input_buffer_timer - dt
+        if menu_input_buffer_timer < 0 and (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) then
+            menu_input_buffer_timer = 0.5
+            gameState = TITLE
             newStage()
         end
     elseif gameState == RUNNING then
@@ -129,10 +140,17 @@ function love.draw()
 
     if gameState == TITLE then
         love.graphics.setColor(1, 1, 1)
-        love.graphics.print("Press Space to Begin")
+        love.graphics.print("RATATOSKR")
+        love.graphics.print("Press Space/X/A to Begin", 0, 50)
     elseif gameState == TUTORIAL then
         love.graphics.setColor(1, 1, 1)
-        love.graphics.print("Arrow Keys/D-Pad Move, Hold Space/A/X To Jump In A Direction")
+        love.graphics.print("Arrow Keys/D-Pad Move")
+        love.graphics.print("Hold Space/A/X To Jump", 0, 50)
+    elseif gameState == END then
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print("GAME OVER")
+        love.graphics.print("You made it to stage: " .. stage, 0, 50)
+        love.graphics.print("Press Space/A/X to return", 0, 100)
     elseif gameState == RUNNING then
         -- Draw Background
         love.graphics.setColor(0, 0, 0)

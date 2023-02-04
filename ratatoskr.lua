@@ -70,7 +70,7 @@ function ratatoskr:update(dt)
         ratatoskr.death_timer = ratatoskr.death_timer - dt
 
         if ratatoskr.death_timer < 0 then
-            newStage(true)
+            gameState = END
         end
     end
 
