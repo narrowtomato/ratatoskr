@@ -99,6 +99,10 @@ end
 function love.update(dt)
 
     if gameState == TITLE then
+        if not sounds.title_music:isPlaying() then
+            love.audio.stop()
+            sounds.title_music:play()
+        end
         logo_animation:update(dt)
 
         menu_input_buffer_timer = menu_input_buffer_timer - dt
