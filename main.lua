@@ -123,6 +123,7 @@ function love.update(dt)
         end
     elseif gameState == INTERMISSION then
         nidhogg_animation:update(dt)
+        eagle_animation:update(dt)
 
         menu_input_buffer_timer = menu_input_buffer_timer - dt
         if menu_input_buffer_timer < 0 and (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) then
@@ -197,7 +198,7 @@ function love.draw()
     elseif gameState == INTERMISSION then
         love.graphics.setColor(1, 1, 1)
         if stage % 2 ~= 0 then
-            love.graphics.draw(eagle_image, 0, 100)
+            eagle_animation:draw(eagle_image, 0, 100)
             love.graphics.draw(sqr_image, 250, 100, nil, 0.10)
             love.graphics.print("You Reached The Top")
             love.graphics.print("Press Jump for the next Stage", 0, 50)

@@ -39,6 +39,8 @@ nidhogg_animation = anim8.newAnimation(nidhogg_anim_grid('1-2', '1-2'), 0.2)
 
 -- Eagle
 eagle_image = love.graphics.newImage('img/eagle.png')
+eagle_anim_grid = anim8.newGrid(eagle_image:getWidth() / 2, eagle_image:getHeight(), eagle_image:getWidth(), eagle_image:getHeight())
+eagle_animation = anim8.newAnimation(eagle_anim_grid('1-2', 1), 0.2)
 
 -- Logo
 logo_image = love.graphics.newImage('img/logo.png')
