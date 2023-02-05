@@ -1,5 +1,11 @@
 function getKeyboardInput()
     if ratatoskr.state == WAITING then
+
+        -- Quit
+        if love.keyboard.isDown('escape') or (joystick and joystick:isGamepadDown("start")) then
+            love.event.quit()
+        end
+
         if sounds.walk:isPlaying() then
             love.audio.stop(sounds.walk)
         end

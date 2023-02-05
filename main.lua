@@ -91,6 +91,7 @@ function love.load()
     gameState = TITLE
     stage = 0
     menu_input_buffer_timer = 0.5
+    lives = 3
     -- Debug
     
 end
@@ -111,6 +112,7 @@ function love.update(dt)
         if menu_input_buffer_timer < 0 and (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) then
             menu_input_buffer_timer = 0.5
             gameState = RUNNING
+            lives = 3
             newStage()
         end
     elseif gameState == INTERMISSION then
@@ -183,8 +185,9 @@ function love.draw()
         love.graphics.printf("Press Space/A/X to Begin!", 0, 350, gameWidth, "center")
     elseif gameState == TUTORIAL then
         love.graphics.setColor(1, 1, 1)
-        love.graphics.print("Arrow Keys/D-Pad Move")
-        love.graphics.print("Hold Space/A/X To Jump", 0, 50)
+        love.graphics.printf("Arrow Keys/D-Pad Move", 0, 50, gameWidth, "center")
+        love.graphics.printf("Hold Space/A/X To Jump", 0, 150, gameWidth, "center")
+        love.graphics.printf("Press Esc/Start to Quit", 0, 250, gameWidth, "center")
     elseif gameState == INTERMISSION then
         love.graphics.setColor(1, 1, 1)
         if stage % 2 ~= 0 then
@@ -259,9 +262,12 @@ function distanceBetween(x1, y1, x2, y2)
     return math.sqrt( (x2 - x1)^2 + (y2 - y1)^2 )
 end
 
-function newStage()
+function newStage(reset)
 
-    stage = stage + 1
+    if not reset then
+        stage = stage + 1
+        TREE_HEIGHT = TREE_HEIGHT + 10
+    end
 
     -- Generate Yggdrasil
     yggdrasil:new_map(TREE_WIDTH, TREE_HEIGHT)

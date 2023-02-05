@@ -3,7 +3,7 @@ sounds = {}
 -- Music
 sounds.music1 = love.audio.newSource("sound/song1v3.wav", "stream")
 sounds.music1:setVolume(0.7)
-sounds.music2 = love.audio.newSource("sound/song2.wav", "stream")
+sounds.music2 = love.audio.newSource("sound/song2v2.wav", "stream")
 sounds.music2:setVolume(0.7)
 
 -- Effects
