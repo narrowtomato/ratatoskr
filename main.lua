@@ -176,8 +176,11 @@ function love.draw()
 
     if gameState == TITLE then
         love.graphics.setColor(1, 1, 1)
-        love.graphics.print("RATATOSKR")
-        love.graphics.print("Press Space/X/A to Begin", 0, 50)
+        love.graphics.printf("RATATOSKR", 0, 50, gameWidth, "center")
+        love.graphics.printf("Programming by Narrowtomato", 0, 150, gameWidth, "center")
+        love.graphics.printf("Art by Timconceivable", 0, 200, gameWidth, "center")
+        love.graphics.printf("Sound by Mitchell Davis", 0, 250, gameWidth, "center")
+        love.graphics.printf("Press Space/A/X to Begin!", 0, 350, gameWidth, "center")
     elseif gameState == TUTORIAL then
         love.graphics.setColor(1, 1, 1)
         love.graphics.print("Arrow Keys/D-Pad Move")
@@ -193,10 +196,13 @@ function love.draw()
             love.graphics.print("Press Jump for the next Stage", 0, 50)
         end
     elseif gameState == END then
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.print("GAME OVER")
-        love.graphics.print("You made it to stage: " .. stage, 0, 50)
-        love.graphics.print("Press Space/A/X to return", 0, 100)
+        love.graphics.printf("GAME OVER", 0, 50, gameWidth, "center")
+        love.graphics.printf("You made it to stage: " .. stage, 0, 100, gameWidth, "center")
+        love.graphics.printf("Programming by Narrowtomato", 0, 150, gameWidth, "center")
+        love.graphics.printf("Art by Timconceivable", 0, 200, gameWidth, "center")
+        love.graphics.printf("Sound by Mitchell Davis", 0, 250, gameWidth, "center")
+        love.graphics.printf("Press Space/A/X to return", 0, 350, gameWidth, "center")
+
     elseif gameState == RUNNING then
         -- Draw Background
         love.graphics.setColor(1, 1, 1)
