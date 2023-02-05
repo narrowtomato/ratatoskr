@@ -20,32 +20,32 @@ function getKeyboardInput()
         end
         
         -- Jumping across gaps
-        if love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a")) and ratatoskr.energy > ratatoskr.JUMP_DEPLETE then 
+        if (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) and ratatoskr.energy > ratatoskr.JUMP_DEPLETE then 
             
             -- Get the maze position to determine if on edge
             local maze_position = {}
             maze_position.x = ratatoskr.lastpos.x / TILE_SIZE + 1
             maze_position.y = ratatoskr.lastpos.y / TILE_SIZE 
             
-            if love.keyboard.isDown('up') or (joystick and joystick:isGamepadDown("dpup")) and maze_position.y > 1 then
+            if (love.keyboard.isDown('up') or (joystick and joystick:isGamepadDown("dpup"))) and maze_position.y > 1 then
                 ratatoskr.state = MOVING_NORTH
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y - TILE_SIZE
                 ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
                 sounds.jump:play()
-            elseif love.keyboard.isDown('left') or (joystick and joystick:isGamepadDown("dpleft")) and maze_position.x > 1 then
+            elseif (love.keyboard.isDown('left') or (joystick and joystick:isGamepadDown("dpleft"))) and maze_position.x > 1 then
                 ratatoskr.state = MOVING_WEST
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x - TILE_SIZE
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y
                 ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
                 sounds.jump:play()
-            elseif love.keyboard.isDown('down') or (joystick and joystick:isGamepadDown("dpdown")) and maze_position.y < TREE_HEIGHT then
+            elseif (love.keyboard.isDown('down') or (joystick and joystick:isGamepadDown("dpdown"))) and maze_position.y < TREE_HEIGHT then
                 ratatoskr.state = MOVING_SOUTH
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y + TILE_SIZE
                 ratatoskr.energy = ratatoskr.energy - ratatoskr.JUMP_DEPLETE
                 sounds.jump:play()
-            elseif love.keyboard.isDown('right') or (joystick and joystick:isGamepadDown("dpright")) and maze_position.x < TREE_WIDTH then
+            elseif (love.keyboard.isDown('right') or (joystick and joystick:isGamepadDown("dpright"))) and maze_position.x < TREE_WIDTH then
                 ratatoskr.state = MOVING_EAST
                 ratatoskr.nextpos.x = ratatoskr.lastpos.x + TILE_SIZE
                 ratatoskr.nextpos.y = ratatoskr.lastpos.y
