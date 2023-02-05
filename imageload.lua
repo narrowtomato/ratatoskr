@@ -42,6 +42,9 @@ logo_image = love.graphics.newImage('img/logo.png')
 logo_anim_grid = anim8.newGrid(logo_image:getWidth(), logo_image:getHeight() / 3, logo_image:getWidth(), logo_image:getHeight())
 logo_animation = anim8.newAnimation(logo_anim_grid(1, '1-3'), 0.3)
 
+-- Sqr
+sqr_image = love.graphics.newImage('img/sqr.png')
+
 -- Font
 font = love.graphics.newFont("fonts/NaughtySquirrelDemo-yrn2.ttf", 20)
 love.graphics.setFont(font)
