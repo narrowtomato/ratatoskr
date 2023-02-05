@@ -64,11 +64,7 @@ function love.load()
     joystick = joysticks[1]
 
     -- Sound Setup
-    sounds = {}
-
-    sounds.music = love.audio.newSource("sound/song1.wav", "stream")
-    sounds.hurt = love.audio.newSource("sound/squirrel_hurt1.wav", "static")
-    sounds.jump =  love.audio.newSource("sound/squirrel_jump1.wav", "static")
+    require('sounds')
 
     -- Load images and set up animations
     require('imageload')
@@ -127,7 +123,7 @@ function love.update(dt)
             newStage()
         end
     elseif gameState == END then 
-        if sounds.music:isPlaying() then
+        if sounds.music1:isPlaying() or sounds.music2:isPlaying() then
             love.audio.stop()
         end
         menu_input_buffer_timer = menu_input_buffer_timer - dt
@@ -139,8 +135,12 @@ function love.update(dt)
     elseif gameState == RUNNING then
 
         -- Play Music
-        if not sounds.music:isPlaying() then
-            love.audio.play(sounds.music)
+        if not sounds.music1:isPlaying() and stage % 2 ~= 0 then
+            love.audio.stop()
+            love.audio.play(sounds.music1)
+        elseif not sounds.music2:isPlaying() and stage % 2 == 0 then
+            love.audio.stop()
+            love.audio.play(sounds.music2)
         end
 
         -- Update Animations

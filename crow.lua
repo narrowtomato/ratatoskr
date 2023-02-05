@@ -12,8 +12,10 @@ function update_crows(dt)
             if ratatoskr.y == crow.y then
                 if ratatoskr.x < crow.x then
                     crow.state = MOVING_WEST
+                    sounds.crow:play()
                 else
                     crow.state = MOVING_EAST
+                    sounds.crow:play()
                 end
             end
         -- Fly to the other side of the tree and reset
@@ -37,9 +39,7 @@ end
 
 function draw_crows()
     love.graphics.setColor(0, 1, 1)
-    for k,crow in pairs(crows) do
-        love.graphics.rectangle("fill", crow.x + (TILE_SIZE / 4) + TILE_SIZE, crow.y - (TILE_SIZE / 4 * 3), TILE_SIZE / 2, TILE_SIZE / 2)
-    
+    for k,crow in pairs(crows) do    
         if crow.state == WAITING then
             crow_idle_animation:draw(crow_image, crow.x + TILE_SIZE / 2 + TILE_SIZE, crow.y - TILE_SIZE / 2, nil, crow.facing, 1, TILE_SIZE / 2, TILE_SIZE / 2)
         else

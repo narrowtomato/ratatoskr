@@ -89,10 +89,12 @@ function ratatoskr:update(dt)
         if stage % 2 ~= 0 then
             if maze_position_y == 1 then
                 gameState = INTERMISSION
+                love.audio.stop(sounds.walk)
             end
         else
             if maze_position_y == TREE_HEIGHT then
                 gameState = INTERMISSION
+                love.audio.stop(sounds.walk)
             end
         end
     end
