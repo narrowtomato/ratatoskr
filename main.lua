@@ -149,6 +149,8 @@ function love.update(dt)
         beetle_1_animation:update(dt)
         beetle_2_animation:update(dt)
         beetle_3_animation:update(dt)
+        crow_idle_animation:update(dt)
+        crow_fly_animation:update(dt)
         background_scroll_factor = background_scroll_factor - dt * 10
 
         -- Get Control Input

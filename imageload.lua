@@ -22,6 +22,9 @@ beetle_3_animation = anim8.newAnimation(beetle_anim_grid_3('1-2', 1), 0.1)
 
 -- Crow
 crow_image = love.graphics.newImage('img/raven.png')
+crow_anim_grid = anim8.newGrid(32, 32, crow_image:getWidth(), crow_image:getHeight())
+crow_idle_animation = anim8.newAnimation(crow_anim_grid('1-2', 1), 0.1)
+crow_fly_animation = anim8.newAnimation(crow_anim_grid('3-6', 1), 0.1)
 
 -- Background
 background_image = love.graphics.newImage('img/clouds.png')
