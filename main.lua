@@ -99,6 +99,8 @@ end
 function love.update(dt)
 
     if gameState == TITLE then
+        logo_animation:update(dt)
+
         menu_input_buffer_timer = menu_input_buffer_timer - dt
         if menu_input_buffer_timer < 0 and (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) then
             gameState = TUTORIAL
@@ -178,7 +180,7 @@ function love.draw()
 
     if gameState == TITLE then
         love.graphics.setColor(1, 1, 1)
-        love.graphics.printf("RATATOSKR", 0, 50, gameWidth, "center")
+        logo_animation:draw(logo_image, gameWidth / 2 - logo_image:getWidth() / 2, 10)
         love.graphics.printf("Programming by Narrowtomato", 0, 150, gameWidth, "center")
         love.graphics.printf("Art by Timconceivable", 0, 200, gameWidth, "center")
         love.graphics.printf("Sound by Mitchell Davis", 0, 250, gameWidth, "center")

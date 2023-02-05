@@ -37,6 +37,11 @@ nidhogg_image = love.graphics.newImage('img/nidhogg.png')
 nidhogg_anim_grid = anim8.newGrid(nidhogg_image:getWidth() / 2, nidhogg_image:getHeight() / 2, nidhogg_image:getWidth(), nidhogg_image:getHeight())
 nidhogg_animation = anim8.newAnimation(nidhogg_anim_grid('1-2', '1-2'), 0.2)
 
+-- Logo
+logo_image = love.graphics.newImage('img/logo.png')
+logo_anim_grid = anim8.newGrid(logo_image:getWidth(), logo_image:getHeight() / 3, logo_image:getWidth(), logo_image:getHeight())
+logo_animation = anim8.newAnimation(logo_anim_grid(1, '1-3'), 0.3)
+
 -- Font
 font = love.graphics.newFont("fonts/NaughtySquirrelDemo-yrn2.ttf", 20)
 love.graphics.setFont(font)
