@@ -38,7 +38,7 @@ function update_crows(dt)
 end
 
 function draw_crows()
-    love.graphics.setColor(0, 1, 1)
+    love.graphics.setColor(1, 1, 1)
     for k,crow in pairs(crows) do    
         if crow.state == WAITING then
             crow_idle_animation:draw(crow_image, crow.x + TILE_SIZE / 2 + TILE_SIZE, crow.y - TILE_SIZE / 2, nil, crow.facing, 1, TILE_SIZE / 2, TILE_SIZE / 2)
