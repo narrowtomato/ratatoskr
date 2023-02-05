@@ -118,6 +118,8 @@ function love.update(dt)
             newStage()
         end
     elseif gameState == INTERMISSION then
+        nidhogg_animation:update(dt)
+
         menu_input_buffer_timer = menu_input_buffer_timer - dt
         if menu_input_buffer_timer < 0 and (love.keyboard.isDown('space') or (joystick and joystick:isGamepadDown("a"))) then
             menu_input_buffer_timer = 0.5
@@ -147,6 +149,7 @@ function love.update(dt)
         beetle_1_animation:update(dt)
         beetle_2_animation:update(dt)
         beetle_3_animation:update(dt)
+        background_scroll_factor = background_scroll_factor - dt * 10
 
         -- Get Control Input
         getKeyboardInput()
@@ -183,6 +186,7 @@ function love.draw()
             love.graphics.print("You Reached The Top")
             love.graphics.print("Press Jump for the next Stage", 0, 50)
         else
+            nidhogg_animation:draw(nidhogg_image, 0, 100)
             love.graphics.print("You Reached The Bottom")
             love.graphics.print("Press Jump for the next Stage", 0, 50)
         end
@@ -193,8 +197,13 @@ function love.draw()
         love.graphics.print("Press Space/A/X to return", 0, 100)
     elseif gameState == RUNNING then
         -- Draw Background
-        love.graphics.setColor(0, 0, 0)
-        love.graphics.rectangle("fill", 0,0, gameWidth,gameHeight)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.draw(background_image, bg_quad, background_scroll_factor - 10, 0)
+        love.graphics.draw(background_image, bg_quad, background_scroll_factor - 300, background_image:getHeight())
+        love.graphics.draw(background_image, bg_quad, background_scroll_factor - 500, background_image:getHeight() * 2)
+        love.graphics.draw(background_image, bg_quad, background_scroll_factor - 200, background_image:getHeight() * 3)
+        love.graphics.draw(background_image, bg_quad, background_scroll_factor - 0, background_image:getHeight() * 4)
+        love.graphics.draw(background_image, bg_quad, background_scroll_factor - 10, background_image:getHeight() * 5)
 
         -- Draw Camera Stuff
         cam:draw(drawCameraStuff)

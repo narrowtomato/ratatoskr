@@ -60,7 +60,7 @@ function update_beetles(dt)
 end
 
 function draw_beetles()
-    love.graphics.setColor(252/255, 10/255, 216/255)
+    love.graphics.setColor(1, 1, 1)
     for k,beetle in pairs(beetles) do
         if beetle.color_variant == 1 then
             beetle_1_animation:draw(beetle_image_1, beetle.x + TILE_SIZE / 2 + TILE_SIZE, beetle.y - TILE_SIZE / 2, beetle.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)
