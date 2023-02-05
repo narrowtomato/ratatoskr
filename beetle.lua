@@ -24,6 +24,7 @@ function update_beetles(dt)
                 beetle.attempting_direction = dirs[love.math.random(1, 4)]
             end
         elseif beetle.state == MOVING_NORTH then
+            beetle.angle = 0
             beetle.y = beetle.y - beetle.speed * dt
             if beetle.y <= beetle.nextpos.y then
                 beetle.y = beetle.nextpos.y
@@ -31,6 +32,7 @@ function update_beetles(dt)
                 beetle.state = WAITING
             end
         elseif beetle.state == MOVING_SOUTH then
+            beetle.angle = math.pi
             beetle.y = beetle.y + beetle.speed * dt
             if beetle.y >= beetle.nextpos.y then
                 beetle.y = beetle.nextpos.y
@@ -38,6 +40,7 @@ function update_beetles(dt)
                 beetle.state = WAITING
             end
         elseif beetle.state == MOVING_EAST then
+            beetle.angle = math.pi / 2
             beetle.x = beetle.x + beetle.speed * dt
             if beetle.x >= beetle.nextpos.x then
                 beetle.x = beetle.nextpos.x
@@ -45,6 +48,7 @@ function update_beetles(dt)
                 beetle.state = WAITING
             end
         elseif beetle.state == MOVING_WEST then
+            beetle.angle = 3 * math.pi / 2
             beetle.x = beetle.x - beetle.speed * dt
             if beetle.x <= beetle.nextpos.x then
                 beetle.x = beetle.nextpos.x
@@ -58,7 +62,13 @@ end
 function draw_beetles()
     love.graphics.setColor(252/255, 10/255, 216/255)
     for k,beetle in pairs(beetles) do
-        love.graphics.rectangle("fill", beetle.x + (TILE_SIZE / 4) + TILE_SIZE, beetle.y - (TILE_SIZE / 4 * 3), TILE_SIZE / 2, TILE_SIZE / 2)
+        if beetle.color_variant == 1 then
+            beetle_1_animation:draw(beetle_image_1, beetle.x + TILE_SIZE / 2 + TILE_SIZE, beetle.y - TILE_SIZE / 2, beetle.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)
+        elseif beetle.color_variant == 2 then
+            beetle_2_animation:draw(beetle_image_2, beetle.x + TILE_SIZE / 2 + TILE_SIZE, beetle.y - TILE_SIZE / 2, beetle.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)
+        elseif beetle.color_variant == 3 then
+            beetle_3_animation:draw(beetle_image_3, beetle.x + TILE_SIZE / 2 + TILE_SIZE, beetle.y - TILE_SIZE / 2, beetle.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)
+        end
     end
 end
 
@@ -71,7 +81,9 @@ function spawn_beetles(number, mov_speed)
             speed = mov_speed,
             state = WAITING,
             nextpos = {x=x,y=y},
-            attempting_direction = "up"
+            attempting_direction = "up",
+            color_variant = love.math.random(1, 3),
+            angle = 0
         }
         beetle.lastpos = {x=beetle.x, y=beetle.y}
         table.insert(beetles, beetle)

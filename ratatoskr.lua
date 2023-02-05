@@ -101,9 +101,12 @@ end
 function ratatoskr:draw()
     if ratatoskr.state == DEAD then 
         love.graphics.setColor(1, 0.5, 0.5)
-        ratatoskr_animation:draw(ratatoskr_image, self.x + TILE_SIZE / 2 + TILE_SIZE, self.y - TILE_SIZE / 2, ratatoskr.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)    
-    else
+        ratatoskr_run_animation:draw(ratatoskr_image, self.x + TILE_SIZE / 2 + TILE_SIZE, self.y - TILE_SIZE / 2, ratatoskr.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)    
+    elseif ratatoskr.state ~= WAITING then
         love.graphics.setColor(1, 1, 1)
-        ratatoskr_animation:draw(ratatoskr_image, self.x + TILE_SIZE / 2 + TILE_SIZE, self.y - TILE_SIZE / 2, ratatoskr.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)    
+        ratatoskr_run_animation:draw(ratatoskr_image, self.x + TILE_SIZE / 2 + TILE_SIZE, self.y - TILE_SIZE / 2, ratatoskr.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)    
+    elseif ratatoskr.state == WAITING then
+        love.graphics.setColor(1, 1, 1)
+        ratatoskr_idle_animation:draw(ratatoskr_image, self.x + TILE_SIZE / 2 + TILE_SIZE, self.y - TILE_SIZE / 2, ratatoskr.angle, nil, nil, TILE_SIZE / 2, TILE_SIZE / 2)      
     end
 end

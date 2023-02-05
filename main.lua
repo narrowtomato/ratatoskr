@@ -142,9 +142,11 @@ function love.update(dt)
         end
 
         -- Update Animations
-        if ratatoskr.state ~= WAITING then
-            ratatoskr_animation:update(dt)
-        end
+        ratatoskr_run_animation:update(dt)
+        ratatoskr_idle_animation:update(dt)
+        beetle_1_animation:update(dt)
+        beetle_2_animation:update(dt)
+        beetle_3_animation:update(dt)
 
         -- Get Control Input
         getKeyboardInput()
