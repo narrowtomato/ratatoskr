@@ -197,6 +197,7 @@ function love.draw()
     elseif gameState == INTERMISSION then
         love.graphics.setColor(1, 1, 1)
         if stage % 2 ~= 0 then
+            love.graphics.draw(eagle_image, 0, 100)
             love.graphics.draw(sqr_image, 250, 100, nil, 0.10)
             love.graphics.print("You Reached The Top")
             love.graphics.print("Press Jump for the next Stage", 0, 50)
