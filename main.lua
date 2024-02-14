@@ -32,6 +32,7 @@ function love.resize(w, h)
     push:resize(w, h)
 end
 
+-- comment
 -- Camera Library
 gamera = require 'lib/gamera-master/gamera'
 cam = gamera.new(0, -200, 2000, 90000)
